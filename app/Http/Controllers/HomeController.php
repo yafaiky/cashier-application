@@ -25,4 +25,11 @@ class HomeController extends Controller
     {
         return view('home');
     }
+
+    public function cetak() {
+        $semuaTransaksi = \App\Models\Transaksi::where('status', 'selesai')->get();
+        return view('cetak', [
+            'semuaTransaksi' => $semuaTransaksi,
+        ]);
+    }
 }

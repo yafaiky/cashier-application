@@ -18,3 +18,5 @@ Route::get('/user', User::class)->middleware('auth')->name('user');
 Route::get('/produk', Produk::class)->middleware('auth')->name('produk');
 Route::get('/transaksi', Transaksi::class)->middleware('auth')->name('transaksi');
 Route::get('/laporan', Laporan::class)->middleware('auth')->name('laporan');
+Route::get('/cetak', [App\Http\Controllers\HomeController::class, 'cetak'])->middleware('auth')->name('cetak');
+Route::get('/beranda', [App\Http\Controllers\BerandaController::class, 'index'])->name('beranda')->middleware('auth');

@@ -1,62 +1,75 @@
-<div>
-    <div class="container">
+<div class="container mt-4">
 
-        <div class="row my-2">
-            <div class="col-12">
+    {{-- MENU --}}
+    <div class="row mb-3">
+        <div class="col-12">
+
+            <div class="d-flex gap-2 flex-wrap">
+
                 <button wire:click="pilihMenu('lihat')"
-                    class="btn {{ $pilihanMenu == 'lihat' ? 'btn-primary' : 'btn-outline-primary' }}">
+                    class="btn px-4 py-2 fw-semibold {{ $pilihanMenu == 'lihat' ? 'btn-primary' : 'btn-outline-primary' }}">
                     Semua Produk
                 </button>
 
                 <button wire:click="pilihMenu('tambah')"
-                    class="btn {{ $pilihanMenu == 'tambah' ? 'btn-primary' : 'btn-outline-primary' }}">
+                    class="btn px-4 py-2 fw-semibold {{ $pilihanMenu == 'tambah' ? 'btn-primary' : 'btn-outline-primary' }}">
                     Tambah Produk
                 </button>
 
-                <button wire:loading class="btn btn-info">
-                    Loading
-                </button>
+                <div wire:loading class="badge bg-info text-dark px-3 py-2">
+                    Loading...
+                </div>
+
             </div>
+
         </div>
+    </div>
 
-        <div class="row">
-            <div class="col-12">
+    {{-- KONTEN --}}
+    <div class="row">
+        <div class="col-12">
 
-                @if ($pilihanMenu == 'lihat')
-                    <div class="card border-primary">
-                        <div class="card-header">Semua Produk</div>
+            {{-- LIHAT PRODUK --}}
+            @if ($pilihanMenu == 'lihat')
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
 
-                        <div class="card-body">
-                            <table class="table table-bordered">
-                                <thead>
+                        <h4 class="fw-bold mb-3">📦 Semua Produk</h4>
+                        <hr>
+
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered align-middle">
+                                <thead class="table-primary">
                                     <tr>
-                                        <th>No</th>
+                                        <th class="text-center" width="60">No</th>
                                         <th>Kode</th>
                                         <th>Nama</th>
                                         <th>Harga</th>
                                         <th>Stok</th>
-                                        <th>Aksi</th>
+                                        <th width="160">Aksi</th>
                                     </tr>
                                 </thead>
 
                                 <tbody>
                                     @foreach ($semuaProduk as $produk)
                                         <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $produk->kode }}</td>
+                                            <td class="text-center">{{ $loop->iteration }}</td>
+                                            <td class="fw-semibold">{{ $produk->kode }}</td>
                                             <td>{{ $produk->nama }}</td>
-                                            <td>{{ $produk->harga }}</td>
+                                            <td>Rp {{ number_format($produk->harga, 0, ',', '.') }}</td>
                                             <td>{{ $produk->stok }}</td>
                                             <td>
-                                                <button wire:click="pilihEdit({{ $produk->id }})"
-                                                    class="btn btn-outline-primary">
-                                                    Edit
-                                                </button>
+                                                <div class="d-flex gap-1">
+                                                    <button wire:click="pilihEdit({{ $produk->id }})"
+                                                        class="btn btn-sm btn-outline-primary">
+                                                        Edit
+                                                    </button>
 
-                                                <button wire:click="pilihHapus({{ $produk->id }})"
-                                                    class="btn btn-outline-danger">
-                                                    Hapus
-                                                </button>
+                                                    <button wire:click="pilihHapus({{ $produk->id }})"
+                                                        class="btn btn-sm btn-outline-danger">
+                                                        Hapus
+                                                    </button>
+                                                </div>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -64,89 +77,122 @@
 
                             </table>
                         </div>
+
                     </div>
+                </div>
 
-                @elseif ($pilihanMenu == 'tambah')
-                    <div class="card border-primary">
-                        <div class="card-header">Tambah Produk</div>
+            {{-- TAMBAH PRODUK --}}
+            @elseif ($pilihanMenu == 'tambah')
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
 
-                        <div class="card-body">
-                            <form wire:submit.prevent='simpan'>
-                                <label>Nama</label>
+                        <h4 class="fw-bold mb-3">➕ Tambah Produk</h4>
+                        <hr>
+
+                        <form wire:submit.prevent='simpan' class="row g-3">
+
+                            <div class="col-md-6">
+                                <label class="fw-semibold">Nama</label>
                                 <input type="text" class="form-control" wire:model='nama'>
-                                @error('nama') <span class="text-danger">{{ $message }}</span> @enderror
-                                <br>
+                                @error('nama') <small class="text-danger">{{ $message }}</small> @enderror
+                            </div>
 
-                                <label>Kode</label>
+                            <div class="col-md-6">
+                                <label class="fw-semibold">Kode</label>
                                 <input type="text" class="form-control" wire:model='kode'>
-                                @error('kode') <span class="text-danger">{{ $message }}</span> @enderror
-                                <br>
+                                @error('kode') <small class="text-danger">{{ $message }}</small> @enderror
+                            </div>
 
-                                <label>Harga</label>
+                            <div class="col-md-6">
+                                <label class="fw-semibold">Harga</label>
                                 <input type="number" class="form-control" wire:model='harga'>
-                                @error('harga') <span class="text-danger">{{ $message }}</span> @enderror
-                                <br>
+                                @error('harga') <small class="text-danger">{{ $message }}</small> @enderror
+                            </div>
 
-                                <label>Stok</label>
+                            <div class="col-md-6">
+                                <label class="fw-semibold">Stok</label>
                                 <input type="number" class="form-control" wire:model='stok'>
-                                @error('stok') <span class="text-danger">{{ $message }}</span> @enderror
-                                <br>
+                                @error('stok') <small class="text-danger">{{ $message }}</small> @enderror
+                            </div>
 
-                                <button type="submit" class="btn btn-primary mt-3">SIMPAN</button>
-                            </form>
-                        </div>
+                            <div class="col-12 mt-3">
+                                <button type="submit" class="btn btn-primary px-4">SIMPAN</button>
+                            </div>
+
+                        </form>
+
                     </div>
+                </div>
 
-                @elseif ($pilihanMenu == 'edit')
-                    <div class="card border-primary">
-                        <div class="card-header">Edit Produk</div>
+            {{-- EDIT PRODUK --}}
+            @elseif ($pilihanMenu == 'edit')
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
 
-                        <div class="card-body">
-                            <form wire:submit.prevent='simpanEdit'>
-                                <label>Nama</label>
+                        <h4 class="fw-bold mb-3">✏️ Edit Produk</h4>
+                        <hr>
+
+                        <form wire:submit.prevent='simpanEdit' class="row g-3">
+
+                            <div class="col-md-6">
+                                <label class="fw-semibold">Nama</label>
                                 <input type="text" class="form-control" wire:model='nama'>
-                                @error('nama') <span class="text-danger">{{ $message }}</span> @enderror
-                                <br>
+                                @error('nama') <small class="text-danger">{{ $message }}</small> @enderror
+                            </div>
 
-                                <label>Kode</label>
+                            <div class="col-md-6">
+                                <label class="fw-semibold">Kode</label>
                                 <input type="text" class="form-control" wire:model='kode'>
-                                @error('kode') <span class="text-danger">{{ $message }}</span> @enderror
-                                <br>
+                                @error('kode') <small class="text-danger">{{ $message }}</small> @enderror
+                            </div>
 
-                                <label>Harga</label>
+                            <div class="col-md-6">
+                                <label class="fw-semibold">Harga</label>
                                 <input type="number" class="form-control" wire:model='harga'>
-                                @error('harga') <span class="text-danger">{{ $message }}</span> @enderror
-                                <br>
+                                @error('harga') <small class="text-danger">{{ $message }}</small> @enderror
+                            </div>
 
-                                <label>Stok</label>
+                            <div class="col-md-6">
+                                <label class="fw-semibold">Stok</label>
                                 <input type="number" class="form-control" wire:model='stok'>
-                                @error('stok') <span class="text-danger">{{ $message }}</span> @enderror
-                                <br>
+                                @error('stok') <small class="text-danger">{{ $message }}</small> @enderror
+                            </div>
 
-                                <button type="submit" class="btn btn-primary mt-3">SIMPAN</button>
-                            </form>
-                        </div>
+                            <div class="col-12 mt-3">
+                                <button type="submit" class="btn btn-primary px-4">SIMPAN</button>
+                            </div>
+
+                        </form>
+
+                    </div>
+                </div>
+
+            {{-- HAPUS PRODUK --}}
+            @elseif ($pilihanMenu == 'hapus')
+                <div class="card shadow-sm border-0 border-danger">
+                    <div class="card-header bg-danger text-white fw-bold">
+                        Hapus Produk
                     </div>
 
-                @elseif ($pilihanMenu == 'hapus')
-                    <div class="card border-danger">
-                        <div class="card-header bg-danger text-white">
-                            Hapus Produk
+                    <div class="card-body">
+
+                        <h5 class="fw-semibold">Apakah Anda yakin ingin menghapus produk ini?</h5>
+
+                        <div class="mt-3 mb-4 p-3 bg-light rounded">
+                            <p class="mb-1"><strong>Kode:</strong> {{ $produkTerpilih->kode }}</p>
+                            <p class="mb-0"><strong>Nama:</strong> {{ $produkTerpilih->nama }}</p>
                         </div>
 
-                        <div class="card-body">
-                            Apakah kamu yakin akan menghapus produk ini?
-                            <p>Kode : {{ $produkTerpilih->kode }}</p>
-                            <p>Nama : {{ $produkTerpilih->nama }}</p>
-
-                            <button class="btn btn-danger" wire:click='hapus'>HAPUS</button>
-                            <button class="btn btn-secondary" wire:click='batal'>BATAL</button>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-danger px-4" wire:click='hapus'>HAPUS</button>
+                            <button class="btn btn-secondary px-4" wire:click='batal'>BATAL</button>
                         </div>
+
                     </div>
-                @endif
+                </div>
+            @endif
 
-            </div>
         </div>
-
     </div>
+
 </div>
